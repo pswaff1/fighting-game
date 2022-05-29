@@ -42,7 +42,7 @@ class Sprite {
     };
     this.color = color;
     this.attacking = false;
-    this.health = 100
+    this.health = 100;
   }
 
   draw() {
@@ -150,6 +150,33 @@ function rectangularCollision({ rectangle1, rectangle2 }) {
   );
 }
 
+// A function to determine winner
+function determineWinner({ player, enemy, timerID }) {
+  if (player.health === enemy.health) {
+    document.querySelector("#endGameText").innerHTML = "TIE!";
+  } else if (player.health > enemy.health) {
+    document.querySelector("#endGameText").innerHTML = "PLAYER 1 WINS!";
+  } else {
+    document.querySelector("#endGameText").innerHTML = "PLAYER 2 WINS!";
+  }
+  document.querySelector("#endGameText").style.display = "flex";
+  clearTimeout(timerID)
+}
+
+// Update the timer
+let timer = 15;
+let timerID
+function decreaseTimer() {
+  if (timer > 0) {
+    timerID = setTimeout(decreaseTimer, 1000);
+    document.querySelector("#timer").innerHTML = timer;
+    timer--;
+  } else {
+    determineWinner({player, enemy, timerID})
+  }
+}
+decreaseTimer();
+
 // Animating canvas
 function animate() {
   window.requestAnimationFrame(animate);
@@ -186,10 +213,10 @@ function animate() {
     player.attacking
   ) {
     player.attacking = false;
-    enemy.health -= 20
-    document.querySelector('#enemyHealth').style.width = enemy.health + '%'
+    enemy.health -= 20;
+    document.querySelector("#enemyHealth").style.width = enemy.health + "%";
   }
-
+  
   // Detect enemy hit
   if (
     rectangularCollision({
@@ -199,8 +226,13 @@ function animate() {
     enemy.attacking
   ) {
     enemy.attacking = false;
-    player.health -= 20
-    document.querySelector('#playerHealth').style.width = player.health + '%'
+    player.health -= 20;
+    document.querySelector("#playerHealth").style.width = player.health + "%";
+  }
+  
+  // Determine winner
+  if (player.health <= 0 || enemy.health <= 0) {
+      determineWinner({player, enemy, timerID})
   }
 }
 animate();
@@ -210,18 +242,21 @@ window.addEventListener("keydown", (event) => {
   // console.log(event.key)
 
   // Player key presses
-  if (event.key == "d") {
+  if (event.key === "d" || event.key === "D") {
     player.keys.d.pressed = true;
     player.lastKey = "d";
-  } else if (event.key == "a") {
+  } else if (event.key == "a" || event.key === "A") {
     player.keys.a.pressed = true;
     player.lastKey = "a";
-  } else if (event.key == "s" && player.crouched === false) {
+  } else if (
+    (event.key == "s" || event.key === "S") &&
+    player.crouched === false
+  ) {
     player.dimensions.height /= 2;
     player.position.y += player.dimensions.height;
     player.crouched = true;
   } else if (
-    event.key == "w" &&
+    (event.key == "w" || event.key === "W") &&
     player.position.y + player.dimensions.height >= canvas.height
   ) {
     player.velocity.y = -15;
@@ -230,7 +265,7 @@ window.addEventListener("keydown", (event) => {
   }
 
   // Enemy key presses
-  if (event.key == "ArrowRight") {
+  if (event.key === "ArrowRight") {
     enemy.keys.d.pressed = true;
     enemy.lastKey = "d";
   } else if (event.key == "ArrowLeft") {
@@ -253,11 +288,14 @@ window.addEventListener("keydown", (event) => {
 // Listen for key releases
 window.addEventListener("keyup", (event) => {
   // Player keyups
-  if (event.key == "d") {
+  if (event.key == "d" || event.key === "D") {
     player.keys.d.pressed = false;
-  } else if (event.key == "a") {
+  } else if (event.key == "a" || event.key === "A") {
     player.keys.a.pressed = false;
-  } else if (event.key == "s" && player.crouched == true) {
+  } else if (
+    (event.key == "s" || event.key === "S") &&
+    player.crouched == true
+  ) {
     player.position.y -= player.dimensions.height;
     player.dimensions.height *= 2;
     player.crouched = false;
