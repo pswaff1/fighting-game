@@ -1,5 +1,6 @@
 // import Sprite from "/Sprite.js";
 
+// Set up canvas for editing
 const canvas = document.querySelector("canvas");
 const c = canvas.getContext("2d");
 
@@ -7,95 +8,11 @@ const c = canvas.getContext("2d");
 canvas.width = 1024;
 canvas.height = 576;
 
+// Set gravity
 const gravity = 0.7;
 
-// Define Sprite Class
-class Sprite {
-  constructor({ position, velocity, dimensions, color = "red", offset }) {
-    this.position = position;
-    this.velocity = velocity;
-    this.dimensions = dimensions;
-    this.keys = {
-      a: {
-        pressed: false,
-      },
-      s: {
-        pressed: false,
-      },
-      d: {
-        pressed: false,
-      },
-      w: {
-        pressed: false,
-      },
-    };
-    this.lastKey;
-    this.crouched = false;
-    this.attackBox = {
-      position: {
-        x: this.position.x,
-        y: this.position.y,
-      },
-      offset,
-      width: 100,
-      height: 50,
-    };
-    this.color = color;
-    this.attacking = false;
-    this.health = 100;
-  }
-
-  draw() {
-    // Draw character
-    c.fillStyle = this.color;
-    c.fillRect(
-      this.position.x,
-      this.position.y,
-      this.dimensions.width,
-      this.dimensions.height
-    );
-
-    // Draw attackBox
-    if (this.attacking) {
-      c.fillStyle = "gold";
-      c.fillRect(
-        this.attackBox.position.x,
-        this.attackBox.position.y,
-        this.attackBox.width,
-        this.attackBox.height
-      );
-    }
-  }
-
-  update() {
-    this.draw();
-
-    this.attackBox.position.x = this.position.x + this.attackBox.offset.x;
-    this.attackBox.position.y = this.position.y;
-
-    this.position.y += this.velocity.y;
-    this.position.x += this.velocity.x;
-
-    if (
-      this.position.y + this.dimensions.height + this.velocity.y >
-      canvas.height
-    ) {
-      this.velocity.y = 0;
-    } else {
-      this.velocity.y += gravity;
-    }
-  }
-
-  attack() {
-    this.attacking = true;
-    setTimeout(() => {
-      this.attacking = false;
-    }, 100);
-  }
-}
-
 // Create charactor Sprite
-const player = new Sprite({
+const player = new Fighter({
   position: {
     x: 0,
     y: 0,
@@ -116,7 +33,7 @@ const player = new Sprite({
 });
 
 // Create enemey Sprite
-const enemy = new Sprite({
+const enemy = new Fighter({
   position: {
     x: 974,
     y: 0,
