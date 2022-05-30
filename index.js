@@ -181,13 +181,15 @@ decreaseTimer();
 // Animating canvas
 function animate() {
   window.requestAnimationFrame(animate);
-  c.clearRect(0, 0, canvas.width, canvas.height);
   c.fillStyle = "black";
   c.fillRect(0, 0, canvas.width, canvas.height);
-  c.fillStyle = "red";
 
   background.update();
   shop.update();
+
+  c.fillStyle = "rgba(255,255,255,0.15)";
+  c.fillRect(0, 0, canvas.width, canvas.height);
+
   player.update();
   enemy.update();
 
@@ -241,7 +243,9 @@ function animate() {
     enemy.takeHit();
     player.attacking = false;
 
-    document.querySelector("#enemyHealth").style.width = enemy.health + "%";
+    gsap.to('#enemyHealth', {
+        width: enemy.health + '%'
+    })
   }
 
   // If player misses
@@ -259,8 +263,11 @@ function animate() {
     enemy.currentFrame === 2
   ) {
     player.takeHit();
-    enemy.attacking = false;
-    document.querySelector("#playerHealth").style.width = player.health + "%";
+    enemy.attacking = false
+    gsap.to('#playerHealth', {
+        width: player.health + '%'
+    })
+
   }
 
   // If player misses
@@ -278,8 +285,9 @@ animate();
 // Listen for key presses
 window.addEventListener("keydown", (event) => {
   // console.log(event.key)
-  if (player.health > 0 && enemy.health > 0 && timer > 0) {
-    // Player key presses
+
+  // Player key presses
+  if (!player.dead) {
     if (event.key === "d" || event.key === "D") {
       player.keys.d.pressed = true;
       player.lastKey = "d";
@@ -294,8 +302,10 @@ window.addEventListener("keydown", (event) => {
     } else if (event.key == " ") {
       player.attack();
     }
+  }
 
-    // Enemy key presses
+  // Enemy key presses
+  if (!enemy.dead) {
     if (event.key === "ArrowRight") {
       enemy.keys.d.pressed = true;
       enemy.lastKey = "d";
