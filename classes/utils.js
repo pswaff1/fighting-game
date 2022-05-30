@@ -1,13 +1,13 @@
 // Check for collision between two rectangles
 function rectangularCollision({ rectangle1, rectangle2 }) {
     return (
-      rectangle1.attackBox.position.x + rectangle1.attackBox.width >
+      rectangle1.attackBox.position.x + rectangle1.attackBox.width >=
         rectangle2.position.x &&
-      rectangle1.attackBox.position.x <
+      rectangle1.attackBox.position.x <=
         rectangle2.position.x + rectangle2.dimensions.width &&
-      rectangle1.attackBox.position.y <
+      rectangle1.attackBox.position.y <=
         rectangle2.position.y + rectangle2.dimensions.height &&
-      rectangle1.attackBox.position.y + rectangle1.attackBox.height >
+      rectangle1.attackBox.position.y + rectangle1.attackBox.height >=
         rectangle2.position.y
     );
   }
@@ -26,7 +26,7 @@ function rectangularCollision({ rectangle1, rectangle2 }) {
   }
   
   // Update the timer
-  let timer = 15;
+  let timer = 10;
   let timerID
   function decreaseTimer() {
     if (timer > 0) {
