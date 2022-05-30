@@ -1,25 +1,14 @@
 // Define Sprite Class
 class Sprite {
-    constructor({ position, dimensions}) {
+    constructor({ position, dimensions, imageSrc }) {
       this.position = position;
       this.dimensions = dimensions;
-      this.keys = {
-        a: {
-          pressed: false,
-        },
-        s: {
-          pressed: false,
-        },
-        d: {
-          pressed: false,
-        },
-        w: {
-          pressed: false,
-        },
-      };
+      this.image = new Image()
+      this.image.src = imageSrc
     }
   
     draw() {
+        c.drawImage(this.image, this.position.x, this.position.y)
     }
   
     update() {
