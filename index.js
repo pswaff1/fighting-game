@@ -20,6 +20,18 @@ const background = new Sprite({
     imageSrc: './img/background.png'
 })
 
+// Set shop sprite
+const shop = new Sprite({
+    position: {
+        x: canvas.width / 2 + 120,
+        y: canvas.height- 96 - 128 * 2.75
+    },
+    scale: 2.75,
+    frames: 6,
+    imageSrc: './img/shop.png'
+
+})
+
 // Create charactor Sprite
 const player = new Fighter({
   position: {
@@ -74,6 +86,7 @@ function animate() {
   c.fillStyle = "red";
 
   background.update()
+  shop.update()
   player.update()
   enemy.update()
 
@@ -147,7 +160,7 @@ window.addEventListener("keydown", (event) => {
     player.crouched = true;
   } else if (
     (event.key == "w" || event.key === "W") &&
-    player.position.y + player.dimensions.height >= canvas.height
+    player.position.y + player.dimensions.height >= canvas.height - 96
   ) {
     player.velocity.y = -15;
   } else if (event.key == " ") {
@@ -167,7 +180,7 @@ window.addEventListener("keydown", (event) => {
     enemy.crouched = true;
   } else if (
     event.key == "ArrowUp" &&
-    enemy.position.y + enemy.dimensions.height >= canvas.height
+    enemy.position.y + enemy.dimensions.height >= canvas.height - 96
   ) {
     enemy.velocity.y = -15;
   } else if (event.key == "0") {
